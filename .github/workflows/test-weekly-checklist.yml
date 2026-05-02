@@ -143,7 +143,7 @@ jobs:
             **Week of:** ${dateStr}
             **Due:** ${dueDateStr}
             **Team:** ${issue.team}
-            **Severity:** ${issue.severity}`
+            **Severity:** ${issue.severity}`,
             
                   assignees: issue.assignees || [],
                   labels: labels
