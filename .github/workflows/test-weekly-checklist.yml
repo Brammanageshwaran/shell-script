@@ -22,92 +22,107 @@ jobs:
             const dueDateStr = friday.toISOString().split('T')[0];
             const dateStr = today.toISOString().split('T')[0];
             
-            // Your GitHub username
-            const YOUR_USERNAME = "Brammanageshwaran";
             
             const issues = [
               // ===== AGARWALS TEAM =====
               {
                 title: `[AGARWALS] Check file share backup restorable`,
                 severity: "critical",
-                team: "agarwals"
+                team: "agarwals",
+                assignees: ["Brammanageshwaran"]
               },
               {
                 title: `[AGARWALS] Check PVC backup proper`,
                 severity: "critical",
-                team: "agarwals"
+                team: "agarwals",
+                assignees: ["Brammanageshwaran"]
               },
               {
                 title: `[AGARWALS] Check log rotation and optimize tables`,
                 severity: "high",
-                team: "agarwals"
+                team: "agarwals",
+                assignees: ["Brammanageshwaran"]
               },
               {
                 title: `[AGARWALS] Monitor record/data growth - anomalies`,
                 severity: "high",
-                team: "agarwals"
+                team: "agarwals",
+                assignees: ["Brammanageshwaran"]               
               },
               {
                 title: `[AGARWALS] Check job timing and performance`,
                 severity: "high",
-                team: "agarwals"
+                team: "agarwals",
+                assignees: ["Brammanageshwaran"]
               },
               {
                 title: `[AGARWALS] Ensure all jobs running without errors`,
                 severity: "critical",
-                team: "agarwals"
+                team: "agarwals",
+                assignees: ["Brammanageshwaran"]
               },
               {
                 title: `[AGARWALS] Verify email sending and sync status`,
                 severity: "high",
-                team: "agarwals"
+                team: "agarwals",
+                assignees: ["Brammanageshwaran"]
               },
               {
                 title: `[AGARWALS] Validate report generation`,
                 severity: "medium",
-                team: "agarwals"
+                team: "agarwals",
+                assignees: ["Brammanageshwaran"]
               },
               {
                 title: `[AGARWALS] Confirm Power BI dashboards refreshed`,
                 severity: "medium",
-                team: "agarwals"
+                team: "agarwals",
+                assignees: ["Brammanageshwaran"]
               },
               
               // ===== AVCRI TEAM =====
               {
-                title: `[AVCRI] Check file share backup restorable`,
-                severity: "critical",
-                team: "avcri"
-              },
-              {
                 title: `[AVCRI] Check PVC backup proper`,
                 severity: "critical",
-                team: "avcri"
+                team: "avcri",
+                assignees: ["Brammanageshwaran"]
               },
               {
                 title: `[AVCRI] Monitor record/data growth - anomalies`,
                 severity: "high",
-                team: "avcri"
+                team: "avcri",
+                assignees: ["Brammanageshwaran"]
               },
               {
                 title: `[AVCRI] Verify check-in data sync daily`,
                 severity: "high",
-                team: "avcri"
+                team: "avcri",
+                assignees: ["Brammanageshwaran"]
               },
               {
                 title: `[AVCRI] Perform and verify weekly backups`,
                 severity: "critical",
-                team: "avcri"
+                team: "avcri",
+                assignees: ["Brammanageshwaran"]
               },
+              // ===== WEBSITE =====
               {
-                title: `[AVCRI] Review application logs`,
+                title: `[WEB] Site Health Check`,
                 severity: "medium",
-                team: "avcri"
-              },
-              {
-                title: `[AVCRI] Monitor system resources`,
-                severity: "medium",
-                team: "avcri"
+                team: "web",
+                assignees: ["Brammanageshwaran"],
+                body: `
+              Checklist:
+              
+              - [ ] Site reachable
+              - [ ] Webforms working
+              - [ ] Photos & alignment correct
+              - [ ] Buttons redirect correctly
+              - [ ] Links working
+              - [ ] Captcha working
+              - [ ] Content up to date
+              - [ ] Backup verified
+              `
               }
             ];
             
@@ -121,8 +136,15 @@ jobs:
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   title: issue.title,
-                  body: `**Test Checklist Issue**\n\n**Week of:** ${dateStr}\n**Due:** ${dueDateStr}\n**Team:** ${issue.team}\n**Severity:** ${issue.severity}\n\nThis is a test issue created by GitHub Actions automation.`,
-                  assignees: [YOUR_USERNAME],
+                  body: issue.body || `**Test Checklist Issue**
+            
+            **Week of:** ${dateStr}
+            **Due:** ${dueDateStr}
+            **Team:** ${issue.team}
+            **Severity:** ${issue.severity}
+            
+            This is a test issue created by GitHub Actions automation.`,
+                  assignees: issue.assignees || [],
                   labels: labels
                 });
                 const issueNodeId = response.data.node_id;
@@ -151,5 +173,4 @@ jobs:
             }
             
             console.log(`\n🎉 Successfully created ${createdCount} test issues!`);
-            console.log(`👤 All assigned to: ${YOUR_USERNAME}`);
             console.log(`📅 Due date: ${dueDateStr}`);
