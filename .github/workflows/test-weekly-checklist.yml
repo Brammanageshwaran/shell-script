@@ -13,6 +13,7 @@ jobs:
       - name: Create 16 test checklist issues
         uses: actions/github-script@v7
         with:
+          github-token: ${{ secrets.PAT_TOKEN }}
           script: |
             // Calculate Friday's date
             const today = new Date();
