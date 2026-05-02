@@ -15,11 +15,13 @@ jobs:
         with:
           github-token: ${{ secrets.PAT_TOKEN }}
           script: |
-            // Calculate Friday's date
+            // Calculate NEXT Monday (always future)
             const today = new Date();
-            const friday = new Date(today);
-            friday.setDate(today.getDate() + (5 - today.getDay()));
-            const dueDateStr = friday.toISOString().split('T')[0];
+            const monday = new Date(today);
+            const day = today.getDay(); // 0=Sun ... 6=Sat
+            const diff = (1 - day + 7) % 7 || 7;
+            monday.setDate(today.getDate() + diff);
+            const dueDateStr = monday.toISOString().split('T')[0];
             const dateStr = today.toISOString().split('T')[0];
             
             
@@ -129,21 +131,20 @@ jobs:
             let createdCount = 0;
             
             for (const issue of issues) {
-              const labels = [`severity:${issue.severity}`, `team:${issue.team}`, "test-checklist"];
+              const labels = [`severity:${issue.severity}`, `team:${issue.team}`];
               
               try {
                 const response = await github.rest.issues.create({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   title: issue.title,
-                  body: issue.body || `**Test Checklist Issue**
+                  body: issue.body || `**Weekly Production Checklist**
             
             **Week of:** ${dateStr}
             **Due:** ${dueDateStr}
             **Team:** ${issue.team}
-            **Severity:** ${issue.severity}
+            **Severity:** ${issue.severity}`
             
-            This is a test issue created by GitHub Actions automation.`,
                   assignees: issue.assignees || [],
                   labels: labels
                 });
@@ -172,5 +173,5 @@ jobs:
               }
             }
             
-            console.log(`\n🎉 Successfully created ${createdCount} test issues!`);
+            console.log(`\n🎉 Successfully created ${createdCount} checklist issues!`);
             console.log(`📅 Due date: ${dueDateStr}`);
