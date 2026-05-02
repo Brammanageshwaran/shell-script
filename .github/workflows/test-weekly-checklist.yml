@@ -1,7 +1,11 @@
 name: Test Weekly Checklist
 
 on:
-  workflow_dispatch:  # Manual trigger - click button to run
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: write
+  projects: write
 
 jobs:
   create-test-issues:
@@ -120,6 +124,23 @@ jobs:
                   body: `**Test Checklist Issue**\n\n**Week of:** ${dateStr}\n**Due:** ${dueDateStr}\n**Team:** ${issue.team}\n**Severity:** ${issue.severity}\n\nThis is a test issue created by GitHub Actions automation.`,
                   assignees: [YOUR_USERNAME],
                   labels: labels
+                });
+                const issueNodeId = response.data.node_id;
+                
+                await github.graphql(`
+                  mutation($projectId: ID!, $contentId: ID!) {
+                    addProjectV2ItemById(input: {
+                      projectId: $projectId,
+                      contentId: $contentId
+                    }) {
+                      item {
+                        id
+                      }
+                    }
+                  }
+                `, {
+                  projectId: "PVT_kwHOB5TKFc4BV8qj",
+                  contentId: issueNodeId
                 });
                 
                 createdCount++;
